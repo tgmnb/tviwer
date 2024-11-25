@@ -41,7 +41,7 @@ if platform.system() == 'Windows':
     asyncio.set_event_loop(asyncio.ProactorEventLoop())
 
 # todo 并发数CONCURRENCY，按个人电脑配置修改
-cpu = 6
+cpu = 4
 CONCURRENCY = max(cpu, 1)
 semaphore = asyncio.Semaphore(value=min(2 * cpu, 8))
 
@@ -67,7 +67,7 @@ SETTLED_SPOT_SYMBOLS = {
 
 swap_delist_symbol_set = {'1000BTTCUSDT', 'CVCUSDT', 'DODOUSDT', 'RAYUSDT', 'SCUSDT', 'SRMUSDT', 'LENDUSDT', 'NUUSDT',
                           'LUNAUSDT', 'YFIIUSDT', 'BTCSTUSDT'}
-swap_delist_symbol_set = {}
+
 spot_blacklist = []
 # todo 设置下载现货（spot）、U本位合约（swap）数据
 # trade_type = 'spot'
@@ -98,8 +98,8 @@ use_proxy_download_file = False
 file_proxy = proxy if use_proxy_download_file else None
 
 # todo 保存目录
-# root_path = '/home/moke/market/'
 root_path = '.\\market\\'
+# root_path = 'D:\\market\\'
 if not os.path.exists(root_path):
     os.makedirs(root_path)
 # 清理最新的接口数据
@@ -107,32 +107,34 @@ if not os.path.exists(root_path):
 # [os.remove(zip) for zip in zip_list]
 
 # todo 配置fundingRate保存目录
-funding_path = '/home/moke/market/funding'
-# funding_path = 'D:\\market\\funding\\'
+# funding_path = '/home/moke/market/funding'
+funding_path = '.\\market\\funding\\'
 if not os.path.exists(funding_path):
     os.makedirs(funding_path)
 
 # todo 配置 合约持仓量 保存目录
-openInterestHist_path = '/home/moke/market/openInterestHist'
-# openInterestHist_path = 'D:\\market\\openInterestHist\\'
+# openInterestHist_path = '/home/moke/market/openInterestHist'
+openInterestHist_path = '.\\market\\openInterestHist\\'
 if not os.path.exists(openInterestHist_path):
     os.makedirs(openInterestHist_path)
 
 # todo 配置 合约主动买卖量 保存目录
-takerlongshortRatio_path = '/home/moke/market/takerlongshortRatio'
-# takerlongshortRatio_path = 'D:\\market\\takerlongshortRatio\\'
+# takerlongshortRatio_path = '/home/moke/market/takerlongshortRatio'
+takerlongshortRatio_path = '.\\market\\takerlongshortRatio\\'
 if not os.path.exists(takerlongshortRatio_path):
     os.makedirs(takerlongshortRatio_path)
 
 # todo 配置数据中心pkl生成目录
-pickle_path = f'/home/moke/market/pickle_data_{period}'
+# pickle_path = f'/home/moke/market/pickle_data_{period}'
+pickle_path = f'./market/pickle_data_{period}'
 # pickle_path = 'D:\\market\\pickle_data\\'
 # pickle_path = '/media/moke/data/market/binance/pickle_data/'
 if not os.path.exists(os.path.join(pickle_path, trade_type)):
     os.makedirs(os.path.join(pickle_path, trade_type))
 
 # todo 设置整点分钟偏移量，偏移量最小单位为5分钟，可以设置[5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
-hour_offsets = [5, 10]
+# hour_offsets = [5, 10]
+hour_offsets = []
 offset_pkl_paths = [os.path.join(f'{pickle_path}_{hour_offset}', trade_type) for hour_offset in hour_offsets]
 # 创建偏移pkl保存目录
 [os.makedirs(offset_pkl_path) for offset_pkl_path in offset_pkl_paths if not os.path.exists(offset_pkl_path)]
@@ -1215,9 +1217,9 @@ def data_center_data_to_pickle_data(trading_type, _njobs, metrics_symbols):
     # 去掉头部几行
     df = df[24:].reset_index(drop=True)
     df.to_feather(f'{trading_type}横截面差异指数.pkl')
-    df.set_index('candle_begin_time', inplace=True)
-    df.plot(figsize=(16, 9), grid=True)
-    plt.show()
+    # df.set_index('candle_begin_time', inplace=True)
+    # df.plot(figsize=(16, 9), grid=True)
+    # plt.show()
 
 
 async def get_fundingRate_from_aio_api(symbol, start_time, end_time, delist=False):
@@ -1710,6 +1712,6 @@ if __name__ == "__main__":
         metrics_analyse()
         exit(0)
     run()
-    df = pd.read_feather(os.path.join(pickle_path, trade_type, 'BTC-USDT.pkl'))
-    print(df.head(10))
-    print(df.tail(10))
+    # df = pd.read_feather(os.path.join(pickle_path, trade_type, 'BTC-USDT.pkl'))
+    # print(df.head(10))
+    # print(df.tail(10))
