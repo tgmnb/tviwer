@@ -2,24 +2,24 @@ import subprocess
 import schedule
 import time
 import subprocess
-
+import data_resample
 # 定义运行脚本的函数
-def run_script(script_name):
+def run_script():
+    '''
+    主要脚本
+    启动数据中心脚本，进行数据聚合
+    '''
     print("开始运行脚本...")
-    # 使用 subprocess.run 运行另一个 Python 脚本
-    starttime = time.time()
-    result = subprocess.run(["python", script_name], capture_output=True, text=True)
-    # 打印脚本输出
+    # 运行数据中心
+    s_time = time.time()
+    result = subprocess.run(["python", "data_center.py"], capture_output=True, text=True)
     endtime = time.time()
-    runtime = endtime - starttime
-    print("脚本运行完成，输出如下：,共耗时：", runtime)
-    print(result.stdout)
-    print(result.stderr)
+    print(f"数据中心运行结束,共耗时：{time.time() - s_time}")
+    # 运行数据重采样
+    result = subprocess.run(["python", "data_resample.py"], capture_output=True, text=True)
+    print(f"数据重采样运行结束,共耗时：{time.time() - s_time}")
 
-    # 运行脚本后的其他代码
-    print("运行结束后的其他逻辑代码执行...")
 
-# 定时任务：每隔 1 小时运行一次
 
 def run_loop():
         
@@ -27,10 +27,12 @@ def run_loop():
     time.sleep(1)
 
 def define_schedule():
-    schedule.every().day.at("15:24").do(run_script("data_center.py"))
-
+    # 运行脚本
+    schedule.every().day.at("23:14").do(run_script)
+    time.sleep(2)
     schedule.every(2).hours.do(run_script)
-     
+
+
 def main():
     define_schedule()
     # 持续运行调度器
@@ -45,6 +47,7 @@ def main():
             print(msg)
             time.sleep(10)
             continue
+
 
 if __name__ == '__main__':
     main()
