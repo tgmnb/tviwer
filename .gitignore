@@ -1,3 +1,4 @@
 market/
 __pycache__/
+logs/
 *.pkl
