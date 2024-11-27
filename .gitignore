@@ -1,5 +1,6 @@
-market/
-__pycache__/
-logs/
+market
+__pycache__
+logs
 *.pkl
-data/
+data
+.py_env

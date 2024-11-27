@@ -1,6 +1,7 @@
 import subprocess
 import schedule
 import time
+import os
 import subprocess
 import core.data.data_resample as data_resample
 import core.index_cal as index_cal
@@ -19,8 +20,13 @@ def run_script():
     # 运行数据中心
     s_time = datetime.datetime.now()
     if not conf.DEBUG:
-        result = subprocess.run(["python", get_file_path('core','data','data_center.py')], capture_output=True, text=True)
-        endtime = time.time()
+        result = subprocess.run(
+            ["python", get_file_path('core','data','data_center.py')],
+            env=os.environ | {
+                "PYTHONPATH": ".",
+            },
+        )
+        result.check_returncode()
         logger.info(f"数据中心运行结束,共耗时：{datetime.datetime.now() - s_time}")
         # 运行数据重采样
     data_resample.run()
