@@ -120,7 +120,7 @@ if not os.path.exists(openInterestHist_path):
 
 # todo 配置 合约主动买卖量 保存目录
 # takerlongshortRatio_path = '/home/moke/market/takerlongshortRatio'
-takerlongshortRatio_path = '/market/takerlongshortRatio/'
+takerlongshortRatio_path = './market/takerlongshortRatio/'
 if not os.path.exists(takerlongshortRatio_path):
     os.makedirs(takerlongshortRatio_path)
 
