@@ -5,6 +5,7 @@ import subprocess
 import core.data.data_resample as data_resample
 import core.index_cal as index_cal
 import datetime
+import config as conf
 from core.utils.log_kit import logger
 from core.utils.path_kit import get_file_path
 
@@ -17,15 +18,14 @@ def run_script():
     logger.info("开始运行脚本...")
     # 运行数据中心
     s_time = datetime.datetime.now()
-    result = subprocess.run(["python", get_file_path('core','data','data_center.py')], capture_output=True, text=True)
-    endtime = time.time()
-    logger.info(f"数据中心运行结束,共耗时：{datetime.datetime.now() - s_time}")
-    # 运行数据重采样
-    # result = subprocess.run(["python", get_file_path('core','data','data_resample.py')], capture_output=True, text=True)
+    if not conf.DEBUG:
+        result = subprocess.run(["python", get_file_path('core','data','data_center.py')], capture_output=True, text=True)
+        endtime = time.time()
+        logger.info(f"数据中心运行结束,共耗时：{datetime.datetime.now() - s_time}")
+        # 运行数据重采样
     data_resample.run()
     logger.info(f"数据重采样运行结束,共耗时：{datetime.datetime.now() - s_time}")
     # 计算指标
-    # result = subprocess.run(["python", get_file_path('core','index_cal.py')], capture_output=True, text=True)
     index_cal.cal_index()
     logger.info(f"指标计算运行结束,共耗时：{datetime.datetime.now() - s_time}")
 
@@ -38,7 +38,7 @@ def run_loop():
 def define_schedule():
     # 运行脚本
     run_script()
-    schedule.every().day.at("00:49").do(run_script)
+    schedule.every().day.at("10:00").do(run_script)
     time.sleep(2)
     schedule.every(2).hours.do(run_script)
 
