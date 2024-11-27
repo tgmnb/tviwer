@@ -2,10 +2,23 @@ from core.utils.factor_hub import FactorHub
 from core.utils.log_kit import logger
 from core.utils.path_kit import get_file_path, get_folder_path
 from concurrent.futures import ProcessPoolExecutor, as_completed
+import config as conf
+import polars as pl
 
 def get_factor(factor_name):
-    
+
     return FactorHub.get_by_name(factor_name)
+
+def read_data(type, period):
+    """
+    读取数据
+    """
+    if type == 'spot':
+        data_path = get_file_path( 'market', 'pickle_fin', 'spot', f'{period}.arrow')
+    elif type == 'swap':
+        data_path = get_file_path( 'market', 'pickle_fin', 'swap', f'{period}.arrow')
+    # return pl.(data_path)
+    return pl.read_ipc(data_path, memory_map=True)
 
 def cal_index( multi_process=True, silent=False):
     """
@@ -18,20 +31,18 @@ def cal_index( multi_process=True, silent=False):
         import logging
         logger.setLevel(logging.WARNING)  # 可以减少中间输出的log
 
-    result_folder = 
-    if not multi_process:
-        for strategy in conf.strategy_list:
-            process_strategy(strategy, result_folder)
-        return
+    result_folder = get_folder_path('data', 'index')
+    for type in ['spot', 'swap']:
+        for period in conf.periods:
+            data = read_data(type, period)
 
-    # 多进程模式
-    with ProcessPoolExecutor() as executor:
-        futures = [executor.submit(process_strategy, stg, result_folder) for stg in conf.strategy_list]
+            for factor_name in conf.factor_list:
+                factor = get_factor(factor_name)
+                factor_name = f'{type}_{factor_name}_{period}'
+                print(factor_name)
+                result = factor.signal(data, factor_name)
+                result.write_ipc(get_file_path('data', 'index', f'{factor_name}.arrow'), compression=None)
+    
 
-        for future in as_completed(futures):
-            try:
-                future.result()
-            except Exception as e:
-                logger.exception(e)
-                exit(1)
-
+if __name__ == '__main__':
+    cal_index()

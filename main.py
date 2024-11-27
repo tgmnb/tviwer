@@ -5,6 +5,7 @@ import subprocess
 import core.data.data_resample as data_resample
 import datetime
 from core.utils.log_kit import logger
+from core.utils.path_kit import get_file_path
 
 # 定义运行脚本的函数
 def run_script():
@@ -15,7 +16,7 @@ def run_script():
     logger.info("开始运行脚本...")
     # 运行数据中心
     s_time = datetime.datetime.now()
-    result = subprocess.run(["python", ".\\core\\data\\data_center.py"], capture_output=True, text=True)
+    result = subprocess.run(["python", get_file_path('core','data','data_center.py')], capture_output=True, text=True)
     endtime = time.time()
     logger.info(f"数据中心运行结束,共耗时：{datetime.datetime.now() - s_time}")
     # 运行数据重采样
@@ -33,7 +34,8 @@ def run_loop():
 
 def define_schedule():
     # 运行脚本
-    schedule.every().day.at("16:43").do(run_script)
+    run_script()
+    schedule.every().day.at("00:49").do(run_script)
     time.sleep(2)
     schedule.every(2).hours.do(run_script)
 

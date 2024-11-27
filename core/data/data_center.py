@@ -98,7 +98,7 @@ use_proxy_download_file = False
 file_proxy = proxy if use_proxy_download_file else None
 
 # todo 保存目录
-root_path = '.\\market\\'
+root_path = './market/'
 # root_path = 'D:\\market\\'
 if not os.path.exists(root_path):
     os.makedirs(root_path)
@@ -108,19 +108,19 @@ if not os.path.exists(root_path):
 
 # todo 配置fundingRate保存目录
 # funding_path = '/home/moke/market/funding'
-funding_path = '.\\market\\funding\\'
+funding_path = './market/funding/'
 if not os.path.exists(funding_path):
     os.makedirs(funding_path)
 
 # todo 配置 合约持仓量 保存目录
 # openInterestHist_path = '/home/moke/market/openInterestHist'
-openInterestHist_path = '.\\market\\openInterestHist\\'
+openInterestHist_path = './market/openInterestHist/'
 if not os.path.exists(openInterestHist_path):
     os.makedirs(openInterestHist_path)
 
 # todo 配置 合约主动买卖量 保存目录
 # takerlongshortRatio_path = '/home/moke/market/takerlongshortRatio'
-takerlongshortRatio_path = '.\\market\\takerlongshortRatio\\'
+takerlongshortRatio_path = '/market/takerlongshortRatio/'
 if not os.path.exists(takerlongshortRatio_path):
     os.makedirs(takerlongshortRatio_path)
 
@@ -1711,7 +1711,10 @@ if __name__ == "__main__":
     if analyse_metrics:
         metrics_analyse()
         exit(0)
+    from core.utils.log_kit import logger, divider
+    divider('开始运行阵雨数据中心')
     run()
+    logger.ok('数据中心运行完成')
     # df = pd.read_feather(os.path.join(pickle_path, trade_type, 'BTC-USDT.pkl'))
     # print(df.head(10))
     # print(df.tail(10))
