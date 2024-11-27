@@ -32,7 +32,7 @@ class FactorHub:
 
         try:
             # 构造模块名
-            module_name = f"factors.{factor_name}"
+            module_name = f"core.factors.{factor_name}"
 
             # 动态导入模块
             factor_module = importlib.import_module(module_name)

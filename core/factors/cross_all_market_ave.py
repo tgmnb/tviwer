@@ -15,8 +15,8 @@ def signal(*args):
     )
     average_changes = (
     df.group_by("candle_begin_time")
-      .agg(pl.col("price_change").mean().alias("avg_price_change"))
+      .agg(pl.col("price_change").mean().alias(factor_name))
     )
-    print(average_changes)
+    # print(average_changes)
 
     return average_changes

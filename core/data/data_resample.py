@@ -81,6 +81,11 @@ def aggregate_data(input_dir, output_dir, periods,type):
         logger.info(f'【{type}】{period} 数据已保存到 {output_file}')
     logger.ok(f'{type}数据重采样完成')
 
+def run():
+    divider('开始重采样数据')
+    aggregate_data(get_folder_by_root('market', 'pickle_data_15min', 'swap'), get_folder_by_root('market', 'pickle_fin', 'swap'), periods, 'swap')
+    aggregate_data(get_folder_by_root('market', 'pickle_data_15min', 'spot'), get_folder_by_root('market', 'pickle_fin', 'spot'), periods, 'spot')
+
 if __name__ == '__main__':
     try:
         divider('开始重采样数据')

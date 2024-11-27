@@ -1,5 +1,5 @@
 from core.utils.factor_hub import FactorHub
-from core.utils.log_kit import logger
+from core.utils.log_kit import logger, divider
 from core.utils.path_kit import get_file_path, get_folder_path
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import config as conf
@@ -33,16 +33,18 @@ def cal_index( multi_process=True, silent=False):
 
     result_folder = get_folder_path('data', 'index')
     for type in ['spot', 'swap']:
+        logger.info(f'开始计算 {type} 数据')
         for period in conf.periods:
             data = read_data(type, period)
 
             for factor_name in conf.factor_list:
                 factor = get_factor(factor_name)
-                factor_name = f'{type}_{factor_name}_{period}'
-                print(factor_name)
-                result = factor.signal(data, factor_name)
-                result.write_ipc(get_file_path('data', 'index', f'{factor_name}.arrow'), compression=None)
+                factor_name_inside = f'{type}_{factor_name}_{period}'
+                result = factor.signal(data, factor_name_inside)
+                result.write_ipc(get_file_path('data', 'index',factor_name, f'{factor_name_inside}.arrow'), compression=None)
+            logger.ok(f'{type} {period} 数据计算完成')
     
 
 if __name__ == '__main__':
+    divider('开始计算指标')
     cal_index()
