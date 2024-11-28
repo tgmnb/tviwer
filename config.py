@@ -1,3 +1,8 @@
+import os
+
+os.environ["http_proxy"] = os.getenv("http_proxy", "http://127.0.0.1:7890")
+os.environ["B_CONCURRENCY"] = os.getenv("B_CONCURRENCY", "4")
+
 # 数据重采样周期
 periods = ['30m', '1h', '4h', '12h', '1d', '3d', '1w', '1mo','3mo']
 

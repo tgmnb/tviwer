@@ -41,7 +41,7 @@ if platform.system() == 'Windows':
     asyncio.set_event_loop(asyncio.ProactorEventLoop())
 
 # todo 并发数CONCURRENCY，按个人电脑配置修改
-cpu = 4
+cpu = int(os.getenv("B_CONCURRENCY", "1"))
 CONCURRENCY = max(cpu, 1)
 semaphore = asyncio.Semaphore(value=min(2 * cpu, 8))
 
@@ -90,7 +90,12 @@ else:
 
 # todo 代理设置，无需代理设为None
 # proxy = 'http://127.0.0.1:8889'
-proxy = 'http://127.0.0.1:7890'
+proxy = (
+    os.getenv("http_proxy", None)
+    or os.getenv("https_proxy", None)
+    or os.getenv("HTTP_PROXY", None)
+    or os.getenv("HTTPS_PROXY", None)
+)
 # proxy = None
 # todo 配置下载文件是否需要使用代理，1201版本之前默认不使用代理，1201版本默认使用代理，看个人的网络状况配置
 # 如果 use_proxy_download_file为False时下载数据包运行不下去，就尝试改为True
