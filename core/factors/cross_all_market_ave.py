@@ -13,10 +13,15 @@ def signal(*args):
             .alias("price_change")  # 计算涨跌幅
         )
     )
-    average_changes = (
+    df = (
     df.group_by("candle_begin_time")
-      .agg(pl.col("price_change").mean().alias(factor_name))
+      .agg(pl.col("price_change").mean().alias('avg_price_change'))
     )
     # print(average_changes)
-
-    return average_changes
+    df = df.fill_nan(0)
+    # 用平均涨跌幅累乘，计算全市场指数
+    df = df.with_columns(
+        (1 + pl.col('avg_price_change')).cum_prod().alias(factor_name)
+    )
+    print(df)
+    return df
