@@ -7,12 +7,12 @@ os.environ["B_CONCURRENCY"] = os.getenv("B_CONCURRENCY", "4")
 periods = ['30m', '1h', '4h', '12h', '1d', '3d', '1w', '1mo','3mo']
 
 # 指标计算列表
-factor_list = ['cross_all_market_ave']
-DEBUG = False
+factor_list = ['cross_all_market_ave','BTC']
+DEBUG = True
 if DEBUG:
-    periods = ['30m']
-    factor_list = ['cross_all_market_ave']
+    periods = ['30m', '1h', '4h', '12h', '1d', '3d', '1w', '1mo','3mo']
 
+    factor_list = ['cross_all_market_uprate']
 
 
 idx_list={

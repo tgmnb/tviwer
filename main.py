@@ -29,8 +29,8 @@ def run_script():
         result.check_returncode()
         logger.info(f"数据中心运行结束,共耗时：{datetime.datetime.now() - s_time}")
         # 运行数据重采样
-    data_resample.run()
-    logger.info(f"数据重采样运行结束,共耗时：{datetime.datetime.now() - s_time}")
+        data_resample.run()
+        logger.info(f"数据重采样运行结束,共耗时：{datetime.datetime.now() - s_time}")
     # 计算指标
     index_cal.cal_index()
     logger.info(f"指标计算运行结束,共耗时：{datetime.datetime.now() - s_time}")
