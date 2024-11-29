@@ -70,7 +70,7 @@ swap_delist_symbol_set = {'1000BTTCUSDT', 'CVCUSDT', 'DODOUSDT', 'RAYUSDT', 'SCU
 
 spot_blacklist = []
 # todo 设置下载现货（spot）、U本位合约（swap）数据
-trade_type = 'spot'
+trade_type = os.getenv("B_TRADE_TYPE", "spot")
 # trade_type = 'swap'
 
 # period = '1h'
