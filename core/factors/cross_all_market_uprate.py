@@ -25,5 +25,5 @@ def signal(*args):
     up_count = up_count.with_columns(
         (pl.col("up_count") / pl.col("total_count")).alias(factor_name)
     )
-    print(up_count)
+    # print(up_count)
     return up_count
